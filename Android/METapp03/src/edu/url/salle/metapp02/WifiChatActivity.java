@@ -111,7 +111,7 @@ public class WifiChatActivity extends Activity {
                 System.out.println ("Thread running");
                 try
                 {
-                      socket = new DatagramSocket (4569);
+                      socket = new DatagramSocket (4560);
                       while (true)
                       {
                             final TextView t = (TextView)findViewById(R.id.textView1);                           
