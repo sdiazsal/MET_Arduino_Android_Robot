@@ -49,7 +49,7 @@ public class WifiChatActivity extends Activity {
                           final DatagramSocket socket = new DatagramSocket ();
                           byte[] buf = new byte[256];
                           buf = s.getBytes ();
-                          InetAddress address = InetAddress.getByName ("192.168.0.198");
+                          InetAddress address = InetAddress.getByName ("172.20.10.10");
                           final DatagramPacket packet = new DatagramPacket (buf, buf.length, address, 55056);
                           new Thread ()
                           {
