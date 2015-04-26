@@ -46,12 +46,11 @@ struct Tramas LeeTrama(void) //Leemos el puerto y retornamos una estructura con 
   return Paquete1;
 }
 
-char LeeTramaChar(void)
+char* LeeTramaChar(void)
 {
   char *recibidos;
   return EscuchaPuerto();
 }
-
 
 
 char *EscuchaPuerto(void){  // Escuchamos el puerto y devolvemos toda la trama en formato char.
@@ -61,7 +60,11 @@ char *EscuchaPuerto(void){  // Escuchamos el puerto y devolvemos toda la trama e
   {
     // read the packet into packetBufffer
     int len = Udpread.read(packetBuffer, 255);
-    if (len > 0) packetBuffer[len] = 0; 
+    if (len > 0) packetBuffer[len] = '\0'; //Put a line ending
+    
+    Serial.print("PacketBuffer");
+    Serial.println(packetBuffer);
+    
   }else{
     packetBuffer[0]='\0';
   }  

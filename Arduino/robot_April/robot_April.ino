@@ -6,6 +6,11 @@
 #include <WiFi.h> //librería para controla la transmisión WIFI
 #include <WiFiUdp.h> //libreria para controlar el tráfico UDP
 
+#define SERIAL_ACTIVE
+#define WIFI_ACTIVE
+#define TESTING_AREA
+
+
 //Counter for Interrupts
 int timerCounter=1;
 int timerCounterfreno=0;
@@ -73,9 +78,16 @@ void setup() {
 
 void loop() {
 
-  struct Tramas Paquete=LeeTrama(); //Leemos el puerto por si hay paquete recibido de la WIFI.
-  if (Paquete.activa && !bloqueo_wifi){
-    
+  
+  char* prova = LeeTramaChar();
+  if (prova!=""){
+     Serial.print("TramaChar:");
+     Serial.println(prova);
+  }
+      
+  struct Tramas Paquete=LeeTrama(); //Leemos el puerto por si hay paquete recibido de la WIFI.    
+      
+  if (Paquete.activa && !bloqueo_wifi){   
       Serial.print("Cabecera:");
       Serial.println(Paquete.cabecera);
       Serial.print("Datos:");
