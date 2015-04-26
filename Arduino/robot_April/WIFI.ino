@@ -58,7 +58,7 @@ char* readWifiProtocol(void)
 }
 
 
-char *EscuchaPuerto(void){  // Escuchamos el puerto y devolvemos toda la trama en formato char.
+char *EscuchaPuerto(){  // Escuchamos el puerto y devolvemos toda la trama en formato char.
   // if there's data available, read a packet
   int packetSize = Udpread.parsePacket();
   if (packetSize)
@@ -75,6 +75,41 @@ char *EscuchaPuerto(void){  // Escuchamos el puerto y devolvemos toda la trama e
   }  
  return packetBuffer;
 }
+
+char *readUDP(void){  // Escuchamos el puerto y devolvemos toda la trama en formato char.
+  // if there's data available, read a packet
+  int packetSize = Udpread.parsePacket();
+  if (packetSize)
+  {
+    // read the packet into packetBufffer
+    int len = Udpread.read(packetBuffer, 255);
+    if (len > 0) {
+      packetBuffer[len] = '\0'; //Put a line ending
+      Serial.print("Lenght Detected:");
+      Serial.println(len);
+    }
+    //Serial.print("PacketBuffer: ");
+    //Serial.println(packetBuffer);
+    return packetBuffer;
+  }else{
+    //packetBuffer[0]='\0';
+    return "E"; //No data
+  }  
+}
+
+
+void sendControlUDP(){
+  //Data to send: temp,LEDs,colision,manual/auto,speed,proximity
+}
+
+void sendLaberynthUDP(){
+  //Data to send: position,path,wallsFound,solution
+}
+
+void sendAccelUDP(){
+  //Data to send: X,Y,Z
+}
+
 
 void EscribePuerto(char *Trama){  // enviamos una trama char al puerto para enviarlo al destino
   //Udpread.beginPacket(Udpread.remoteIP(), Udpread.remotePort());

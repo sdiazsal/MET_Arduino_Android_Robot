@@ -37,6 +37,15 @@ struct  Tramas{
   bool activa;   //indica si la trama está en el buffer (1- está en el buffer, 0- ya ha sido leida)
 };
 
+struct WifiRx{
+ char dataType;
+ int  turnAngle;
+ int  speedValue;
+ char manualAuto;
+ char gestureTrigger;
+};
+WifiRx dataRX; //Declare a struct used to hold received data
+
 //Variables de memoria de direccion, distancia, velocidad y angulo
 int aux_distancia=20; //distancia en cm
 int aux_velocidad=3;  //0-stop, 2-media y 3-alta
@@ -84,7 +93,70 @@ void loop() {
   
 #ifdef ENTREGA_5 //Wifi protocol Arduino & Android
 
-EscribePuerto("hola");
+char* data;
+data = readUDP();
+if (data != "E"){ //We found something
+  
+  Serial.print("Data: ");
+  Serial.println(data);
+  
+  Serial.print("Lenght: ");
+  Serial.println(sizeof data); // DOES NOT WORK
+  
+  Serial.println("Printing all: ");
+  Serial.println(data[0]);
+  Serial.println(data[1]);
+  Serial.println(data[2]);
+  Serial.println(data[3]);
+  Serial.println(data[4]);
+  Serial.println(data[5]);
+  Serial.println(data[6]);
+  
+  
+  //Parsing the string -------------------------------
+  //1) Type ( C - control, L - Laberynt, A - Accel)
+  char dataType = data[0];
+  Serial.print("Type: ");
+  Serial.println(dataType);
+  dataRX.dataType=dataType;
+  
+  //2)Turn angle (3chars)
+  char turnAngle[3] = {data[1],data[2],data[3]};
+  int turnAngleInt = atoi(turnAngle);
+  Serial.print("Turn: ");
+  Serial.println(turnAngleInt);
+  dataRX.turnAngle=turnAngleInt;
+  
+  //3)Speed (1char) 1,2,3
+  char speedValue = data[4];
+  int speedValueInt = speedValue-'0';
+  Serial.print("SpeedValue: ");
+  Serial.println(speedValueInt);
+  dataRX.speedValue=speedValueInt;
+  
+  //4)Manual/Auto (Manual == 'M' , Auto == A)
+  char manualOrAuto = data[5];
+  Serial.print("Manual/Auto: ");
+  Serial.println(manualOrAuto);
+  dataRX.manualAuto=manualOrAuto;
+  
+  //5)Gesture triggered (Yes == Y , No == N)
+  char gestureTrigger = data[6];
+  Serial.print("Gesture Triggered: ");
+  Serial.println(gestureTrigger); 
+  dataRX.gestureTrigger=gestureTrigger; 
+  //END Parsing ---------------------------------------
+  
+  
+  //Do whatever is needed to ...
+  
+  
+  //--------------------------
+ 
+ 
+ 
+}
+
 
 #endif //ENTREGA_5
 
@@ -349,6 +421,14 @@ void interruptCallback(){ //Interrupt time
       digitalWrite(29, LOW);
       digitalWrite(27, LOW);
     }    
+    
+    //Send info if we are at Control
+    if (dataRX.type == 'C'){
+       
+    }
+    
+    
+    
   }
 }
 
