@@ -100,6 +100,43 @@ char *readUDP(void){  // Escuchamos el puerto y devolvemos toda la trama en form
 
 void sendControlUDP(){
   //Data to send: temp,LEDs,colision,manual/auto,speed,proximity
+  Udpread.beginPacket("192.168.1.34", 4560); //Android Jordi Casa
+  char dataTX[10];
+  
+  int temp = (int)Lee_temperatura();//Casting from float
+  int LEDs = updateLEDs();
+  char colision = 'N';    //char colision = getColisionStatus();
+  char manualAuto = 'M';  //char manualAuto = getManualAutoStatus();
+  int speedValue = 2;     //int speedValue = getSpeedValue();
+  char proximity = 'N';   //char proximity = getProximityStatus();
+  
+  //Starting TX protocol
+  dataTX[0]='C'; //Data Type Control
+  String str = String(temp);
+  char b;
+  //char tempchar[3] = itoa(temp);
+  //dataTX[1]=tempchar[0];
+  //dataTX[2]=tempchar[1];
+  //dataTX[3]=tempchar[2];
+  dataTX[1]=str[0];
+  dataTX[2]=str[1];
+  dataTX[3]=str[2];
+  
+  str = String(LEDs); 
+  //dataTX[4]=str.toCharArray(b,1);
+  dataTX[4]=str[0];
+  dataTX[5]=colision;
+  dataTX[6]=manualAuto;
+  str = String(speedValue);
+  dataTX[7]=str[0];
+  dataTX[8]=proximity;
+  dataTX[9]='\0';//End
+  
+  Serial.print("Data Sent: ");
+  Serial.println(dataTX);
+  
+  Udpread.write(dataTX);
+  Udpread.endPacket(); 
 }
 
 void sendLaberynthUDP(){

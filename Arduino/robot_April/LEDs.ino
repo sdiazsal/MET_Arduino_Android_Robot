@@ -56,7 +56,8 @@ void startGetLEDs(){ //Starts getting temps during interrupt time
 }
 
 
-void updateLEDs(){
+int updateLEDs(){
+  return 4; //TEST
 	
 	//Get values
 	

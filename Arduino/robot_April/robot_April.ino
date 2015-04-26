@@ -145,6 +145,9 @@ if (data != "E"){ //We found something
   Serial.print("Gesture Triggered: ");
   Serial.println(gestureTrigger); 
   dataRX.gestureTrigger=gestureTrigger; 
+  
+  //dataRX UPDATED!!!
+  
   //END Parsing ---------------------------------------
   
   
@@ -423,8 +426,8 @@ void interruptCallback(){ //Interrupt time
     }    
     
     //Send info if we are at Control
-    if (dataRX.type == 'C'){
-       
+    if (dataRX.dataType == 'C'){
+      sendControlUDP();
     }
     
     
