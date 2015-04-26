@@ -46,10 +46,15 @@ struct Tramas LeeTrama(void) //Leemos el puerto y retornamos una estructura con 
   return Paquete1;
 }
 
-char* LeeTramaChar(void)
+char* readWifiProtocol(void)
 {
   char *recibidos;
-  return EscuchaPuerto();
+  recibidos=EscuchaPuerto();
+    
+    //Starting the reading protocol
+    //----
+    
+  return recibidos;
 }
 
 
@@ -62,7 +67,7 @@ char *EscuchaPuerto(void){  // Escuchamos el puerto y devolvemos toda la trama e
     int len = Udpread.read(packetBuffer, 255);
     if (len > 0) packetBuffer[len] = '\0'; //Put a line ending
     
-    Serial.print("PacketBuffer");
+    Serial.print("PacketBuffer: ");
     Serial.println(packetBuffer);
     
   }else{
@@ -72,7 +77,8 @@ char *EscuchaPuerto(void){  // Escuchamos el puerto y devolvemos toda la trama e
 }
 
 void EscribePuerto(char *Trama){  // enviamos una trama char al puerto para enviarlo al destino
-  Udpread.beginPacket(Udpread.remoteIP(), Udpread.remotePort());
+  //Udpread.beginPacket(Udpread.remoteIP(), Udpread.remotePort());
+  Udpread.beginPacket("192.168.1.34", 4560); //Android Jordi Casa
   Udpread.write(Trama);
   Udpread.endPacket();  
 }

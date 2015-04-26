@@ -10,6 +10,9 @@
 #define WIFI_ACTIVE
 #define TESTING_AREA
 
+//#define ENTREGA_4
+#define ENTREGA_5
+
 
 //Counter for Interrupts
 int timerCounter=1;
@@ -79,12 +82,21 @@ void setup() {
 void loop() {
 
   
-  char* prova = LeeTramaChar();
-  if (prova!=""){
-     Serial.print("TramaChar:");
-     Serial.println(prova);
-  }
-      
+#ifdef ENTREGA_5 //Wifi protocol Arduino & Android
+
+EscribePuerto("hola");
+
+#endif //ENTREGA_5
+
+
+ // char* prova = LeeTramaChar();
+  //if (prova!=""){
+     //Serial.print("TramaChar:");
+    // Serial.println(prova);
+ // }
+    
+    
+#ifdef ENTREGA_4
   struct Tramas Paquete=LeeTrama(); //Leemos el puerto por si hay paquete recibido de la WIFI.    
       
   if (Paquete.activa && !bloqueo_wifi){   
@@ -204,11 +216,14 @@ void loop() {
          break;       
     }        
   }
-  //Main Switch
   
+#endif //ENTREGA_4
+
+
+//Main Switch for menu interaction
   switch(menuSelect){
      case 0: //Main Menu     
-       mainMenu();
+       mainMenu(); //MENU FOR SERIAL INPUT!
       break;
      case 1:
 		startGetTemps();
