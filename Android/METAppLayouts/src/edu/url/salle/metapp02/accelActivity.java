@@ -59,8 +59,8 @@ public class accelActivity extends Activity implements SensorEventListener{
 		text2 = (TextView) findViewById(R.id.text2);
 		text4 = (TextView) findViewById(R.id.text4);
 		text6 = (TextView) findViewById(R.id.text6);
-        
-	
+        onResume();
+		
 
 }
 	
@@ -199,15 +199,15 @@ startActivity(intent);
                 System.out.println ("Thread running");
                 try
                 {
-                      //socket = new DatagramSocket (4560);
-                	  socket = new DatagramSocket (55056);
+                      socket = new DatagramSocket (4560);
+                	  //socket = new DatagramSocket (55056);
                       while (true)
                       {                          
                             packet = new DatagramPacket (buf, buf.length);
                             socket.receive (packet);
                             System.out.println ("Received packet");
                             String s = new String (packet.getData());
-                            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();// Context contexto = this;
                       }
                 }
                 catch (IOException e)

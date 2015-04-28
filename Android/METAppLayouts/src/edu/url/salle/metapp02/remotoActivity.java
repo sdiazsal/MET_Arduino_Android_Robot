@@ -147,8 +147,8 @@ public class remotoActivity extends Activity implements OnGesturePerformedListen
                }
 
 	               default:
-	            	   freno1.setBackgroundColor(0xFFFFFFF);
-	            	   freno1.setBackgroundColor(0xFFFFFFF);
+	            	 //  freno1.setBackgroundColor(0xFFFFFFF);
+	            	//   freno2.setBackgroundColor(0xFFFFFFF);
 	                   return false;
 	                   
 	           }
@@ -336,15 +336,15 @@ public void onGesturePerformed(GestureOverlayView ov, Gesture gesture) {
                 System.out.println ("Thread running");
                 try
                 {
-                      //socket = new DatagramSocket (4560);
-                	  socket = new DatagramSocket (55056);
+                     socket = new DatagramSocket (4560);
+                	 //socket = new DatagramSocket (55056);
                       while (true)
                       {                          
                             packet = new DatagramPacket (buf, buf.length);
                             socket.receive (packet);
                             System.out.println ("Received packet");
                             String s = new String (packet.getData());
-                            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                       }
                 }
                 catch (IOException e)

@@ -138,11 +138,21 @@ void sendControlUDP(){
   Serial.print("Data Sent: ");
   Serial.println(dataTX);
   
+  
+  //IPAddress remoteIp = Udpread.remoteIP();
+   Serial.print(IPSend);
+   Serial.print(", port ");
+   //Serial.println(Udpread.remotePort());
+   Serial.println(sendPort);
   Udpread.beginPacket(IPSend, sendPort); //Android Jordi UNI
   //Udpread.beginPacket(IPRx, PortRx); //Android Jordi UNI
   //Udpread.beginPacket(Udpread.remoteIP(), Udpread.remotePort());
-  Udpread.write(dataTX,sizeof(dataTX));
+  //Udpread.write(dataTX,sizeof(dataTX));
+  Udpread.write("Hola");
   Udpread.endPacket(); 
+  
+  
+  
 }
 
 void sendLaberynthUDP(){

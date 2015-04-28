@@ -14,14 +14,18 @@
 #define ENTREGA_5
 
 
-const IPAddress IPSend (170,20,10,12);
-const int sendPort = 55056;
+//const IPAddress IPSend (170,20,10,13);
+const char IPSend[] = "172.20.10.13";
+//const int sendPort = 55056;
+const int sendPort = 4560;
 const char* WIFIName = "IphonePA";
 const char* WIFIPass ="sable1992";
 
 //byte IP[4]={170,20,10,12};
 IPAddress IPRx;
 int PortRx;
+
+bool flagSendUDPControl = false;
 
 //Counter for Interrupts
 int timerCounter=1;
@@ -92,7 +96,7 @@ void setup() {
     menuSelect=0;     
     
   sei();
-  ini_port_acelerometro(); 
+  //ini_port_acelerometro(); 
     
   drawMainMenu();
   
@@ -181,10 +185,12 @@ if (data != "E"){ //We found something
   }
   
   
-  //--------------------------
- 
- 
- 
+  //-------------------------- 
+}
+
+if(flagSendUDPControl){
+  sendControlUDP();
+  flagSendUDPControl=false;
 }
 
 
@@ -454,7 +460,7 @@ void interruptCallback(){ //Interrupt time
     
     //Send info if we are at Control
     if (dataRX.dataType == 'C'){
-      sendControlUDP();
+      flagSendUDPControl=true;
       //EscribePuerto("C5104NM2N");
     }
     
