@@ -14,6 +14,15 @@
 #define ENTREGA_5
 
 
+const IPAddress IPSend (170,20,10,12);
+const int sendPort = 55056;
+const char* WIFIName = "IphonePA";
+const char* WIFIPass ="sable1992";
+
+//byte IP[4]={170,20,10,12};
+IPAddress IPRx;
+int PortRx;
+
 //Counter for Interrupts
 int timerCounter=1;
 int timerCounterfreno=0;
@@ -77,7 +86,8 @@ void setup() {
     
     
    //ini_WIFI_WPA("vodafoneED7E","SCCDDUPITP6BBM"); //conectamos wifi
-   ini_WIFI_WPA("Dryrain","sibemolsibemo");
+   //ini_WIFI_WPA("Dryrain","sibemolsibemo");
+   ini_WIFI_WPA("IphonePA","sable1992");
     //Ini Menu
     menuSelect=0;     
     
@@ -90,9 +100,9 @@ void setup() {
 
 void loop() {
 
+
   
 #ifdef ENTREGA_5 //Wifi protocol Arduino & Android
-
 char* data;
 data = readUDP();
 if (data != "E"){ //We found something
@@ -100,21 +110,21 @@ if (data != "E"){ //We found something
   Serial.print("Data: ");
   Serial.println(data);
   
-  Serial.print("Lenght: ");
-  Serial.println(sizeof data); // DOES NOT WORK
+  //Serial.print("Lenght: ");
+  //Serial.println(sizeof data); // DOES NOT WORK
   
-  Serial.println("Printing all: ");
-  Serial.println(data[0]);
-  Serial.println(data[1]);
-  Serial.println(data[2]);
-  Serial.println(data[3]);
-  Serial.println(data[4]);
-  Serial.println(data[5]);
-  Serial.println(data[6]);
+//  Serial.println("Printing all: ");
+//  Serial.println(data[0]);
+//  Serial.println(data[1]);
+//  Serial.println(data[2]);
+//  Serial.println(data[3]);
+//  Serial.println(data[4]);
+//  Serial.println(data[5]);
+//  Serial.println(data[6]);
   
   
   //Parsing the string -------------------------------
-  //1) Type ( C - control, L - Laberynt, A - Accel)
+  //1) Type ( C - control, L - Laberynt, A - Accel , X - STOP)
   char dataType = data[0];
   Serial.print("Type: ");
   Serial.println(dataType);
@@ -152,6 +162,23 @@ if (data != "E"){ //We found something
   
   
   //Do whatever is needed to ...
+  switch (dataRX.dataType){ //Reply control data
+    case 'C':
+    //Will be handled during interrupt
+    
+   break;
+  
+    case 'L': // Reply with laberynth data
+    
+     sendLaberynthUDP();
+   
+   break;
+  
+    case 'A': //Reply with accel data
+    
+     sendAccelUDP();
+   break; 
+  }
   
   
   //--------------------------
@@ -387,7 +414,7 @@ void interruptCallback(){ //Interrupt time
   timerCounter++; 
   timerCounterfreno++;
  
-  switch(menuSelect){     
+  /*switch(menuSelect){     
      case 1:
 	if (timerCounter==2){ 
 		Escribe_temp();
@@ -415,19 +442,20 @@ void interruptCallback(){ //Interrupt time
     digitalWrite(29, HIGH);
     digitalWrite(27, HIGH);
   }  
-  
+  */
   if (timerCounterfreno==5){ // contamos 5 segundos y si el freno esta activado apagamos el led rojo a los cinco segundos.	
     timerCounterfreno=0;
-    if(freno_timer==true)
-    {
-      freno_timer=false;
-      digitalWrite(29, LOW);
-      digitalWrite(27, LOW);
-    }    
+    //if(freno_timer==true)
+    //{
+      //freno_timer=false;
+      //digitalWrite(29, LOW);
+      //digitalWrite(27, LOW);
+    //}    
     
     //Send info if we are at Control
     if (dataRX.dataType == 'C'){
       sendControlUDP();
+      //EscribePuerto("C5104NM2N");
     }
     
     

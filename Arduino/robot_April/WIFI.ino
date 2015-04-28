@@ -81,6 +81,13 @@ char *readUDP(void){  // Escuchamos el puerto y devolvemos toda la trama en form
   int packetSize = Udpread.parsePacket();
   if (packetSize)
   {
+    Serial.print("From ");
+    IPAddress remoteIp = Udpread.remoteIP();
+    IPRx=remoteIp;
+    Serial.print(remoteIp);
+    Serial.print(", port ");
+    PortRx=Udpread.remotePort();
+    Serial.println(PortRx);
     // read the packet into packetBufffer
     int len = Udpread.read(packetBuffer, 255);
     if (len > 0) {
@@ -100,7 +107,8 @@ char *readUDP(void){  // Escuchamos el puerto y devolvemos toda la trama en form
 
 void sendControlUDP(){
   //Data to send: temp,LEDs,colision,manual/auto,speed,proximity
-  Udpread.beginPacket("192.168.1.34", 4560); //Android Jordi Casa
+  //Udpread.beginPacket("192.168.1.34", 4560); //Android Jordi Casa
+  
   char dataTX[10];
   
   int temp = (int)Lee_temperatura();//Casting from float
@@ -113,11 +121,6 @@ void sendControlUDP(){
   //Starting TX protocol
   dataTX[0]='C'; //Data Type Control
   String str = String(temp);
-  char b;
-  //char tempchar[3] = itoa(temp);
-  //dataTX[1]=tempchar[0];
-  //dataTX[2]=tempchar[1];
-  //dataTX[3]=tempchar[2];
   dataTX[1]=str[0];
   dataTX[2]=str[1];
   dataTX[3]=str[2];
@@ -135,24 +138,98 @@ void sendControlUDP(){
   Serial.print("Data Sent: ");
   Serial.println(dataTX);
   
-  Udpread.write(dataTX);
+  Udpread.beginPacket(IPSend, sendPort); //Android Jordi UNI
+  //Udpread.beginPacket(IPRx, PortRx); //Android Jordi UNI
+  //Udpread.beginPacket(Udpread.remoteIP(), Udpread.remotePort());
+  Udpread.write(dataTX,sizeof(dataTX));
   Udpread.endPacket(); 
 }
 
 void sendLaberynthUDP(){
   //Data to send: position,path,wallsFound,solution
+  
+  
+  int labXpos = 3; //getLabXpos();
+  int labYpos = 5; //getLabYpos();
+  String labPath = "0010100101001010010100101"; //getLabPath();
+  int wallsHit = 3; //getWallsHit();
+  String labSolution = "0010100101111010010100101"; //getLabSolution();
+  
+  //Starting TX protocol
+  //dataTX[0]='L'; //Data Type Control
+  String strlabX = String(labXpos);
+  //dataTX[1]=strlabX[0];
+
+  
+  String dataToSend = 'L' + String(labXpos) + String(labYpos) + labPath + String(wallsHit) + labSolution;
+  
+  char dataTX[54];
+  dataToSend.toCharArray(dataTX,sizeof(dataTX),0);
+ 
+  
+  Serial.print("Data Sent: ");
+  Serial.println(dataTX);
+  
+  Udpread.beginPacket(IPSend, sendPort);
+  //Udpread.beginPacket(Udpread.remoteIP(), Udpread.remotePort()); //Android Jordi UNI
+  Udpread.write(dataTX,sizeof(dataTX));
+  Udpread.endPacket();   
 }
 
 void sendAccelUDP(){
   //Data to send: X,Y,Z
+  char dataTX[11];
+  
+  int Xpos = 100;//getPositionX();
+  int Ypos = 110;//getPositionY();
+  int Zpos = 111;//getPositionZ();
+  
+  //Starting TX protocol
+  dataTX[0]='A'; //Data Type Control
+  
+  String strX = String(Xpos);
+  String strY = String(Ypos);
+  String strZ = String(Zpos);
+  dataTX[1]=strX[0];
+  dataTX[2]=strX[1];
+  dataTX[3]=strX[2];
+  dataTX[4]=strY[0];
+  dataTX[5]=strY[1];
+  dataTX[6]=strY[2];
+  dataTX[7]=strZ[0];
+  dataTX[8]=strZ[1];
+  dataTX[9]=strZ[2];
+
+  dataTX[10]='\0';//End
+  
+  Serial.print("Data Sent: ");
+  Serial.println(dataTX);
+  
+  Udpread.beginPacket(IPSend, sendPort);
+  //Udpread.beginPacket(Udpread.remoteIP(), Udpread.remotePort()); //Android Jordi UNI
+  Udpread.write(dataTX,sizeof(dataTX));
+  Udpread.endPacket();
+  
 }
 
 
 void EscribePuerto(char *Trama){  // enviamos una trama char al puerto para enviarlo al destino
   //Udpread.beginPacket(Udpread.remoteIP(), Udpread.remotePort());
-  Udpread.beginPacket("192.168.1.34", 4560); //Android Jordi Casa
+ // Udpread.beginPacket("192.168.1.34", 4560); //Android Jordi Casa
+  //Udpread.beginPacket("170.20.10.12", 55056); //Android Jordi UNI
+  Serial.print("To ");
+   //IPAddress remoteIp = Udpread.remoteIP();
+   IPAddress remoteIp = Udpread.remoteIP();
+   Serial.print(remoteIp);
+   Serial.print(", port ");
+   Serial.println(Udpread.remotePort());
+  //Udpread.beginPacket(remoteIp, 55056);
+   //Udpread.beginPacket("170.20.10.12", 55056);
+  Udpread.beginPacket(Udpread.remoteIP(), Udpread.remotePort());
   Udpread.write(Trama);
   Udpread.endPacket();  
+  Serial.print("Data Sent: ");
+  Serial.println(Trama);
 }
 
 void printWifiData() {

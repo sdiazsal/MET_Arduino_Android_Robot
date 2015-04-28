@@ -40,6 +40,27 @@
             android:name=".WifiService"
             android:label="@string/title_activity_wifi_service" >
         </service>
+        
+        <activity
+            android:name=".remotoActivity"
+            >
+        </activity>
+      
+        
+        <activity
+            android:name=".accelActivity"
+             >
+        </activity>
+        <activity
+            android:name=".logActivity"
+             >
+        </activity>
+        <activity
+            android:name=".laberintoActivity"
+             >
+        </activity>
+        
+        
     </application>
 
 </manifest>

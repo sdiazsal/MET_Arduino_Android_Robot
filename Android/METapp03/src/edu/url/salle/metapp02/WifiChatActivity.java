@@ -44,13 +44,16 @@ public class WifiChatActivity extends Activity {
                     final EditText et = (EditText)findViewById(R.id.editText1);
                     Editable e = et.getText();
                     String s = e.toString();
+                    //String s = "C2553MY";
                     try
                     {
                           final DatagramSocket socket = new DatagramSocket ();
                           byte[] buf = new byte[256];
                           buf = s.getBytes ();
                           //InetAddress address = InetAddress.getByName ("192.168.1.39");
-                          InetAddress address = InetAddress.getByName ("192.168.1.45"); //Arduino Casa Jordi
+                          //InetAddress address = InetAddress.getByName ("192.168.1.45"); //Arduino Casa Jordi
+                          InetAddress address = InetAddress.getByName ("172.20.10.9"); //Arduino UNI
+
 
                           final DatagramPacket packet = new DatagramPacket (buf, buf.length, address, 55056);
                           new Thread ()
@@ -75,6 +78,8 @@ public class WifiChatActivity extends Activity {
                     }
                     catch (SocketException e1) {}
                     catch (UnknownHostException e2) {}
+            	  
+            	  //sendData();
               }          
         });
 
@@ -82,6 +87,31 @@ public class WifiChatActivity extends Activity {
         t.start();
   }
 
+	
+	public boolean sendData(){
+		try {
+			final DatagramSocket socket = new DatagramSocket ();
+			InetAddress address;
+			address = InetAddress.getByName ("192.168.1.45");
+			
+			byte[] buf = new byte[256];
+	        String s = "C2553MY"; //TESTING
+	        buf = s.getBytes ();
+			
+	        final DatagramPacket packet = new DatagramPacket (buf, buf.length, address, 55056);
+			System.out.println ("About to send message");
+            socket.send (packet);
+            System.out.println ("Sent message");
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (UnknownHostException e) {e.printStackTrace();
+		}catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}      
+		return false;
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,7 +143,8 @@ public class WifiChatActivity extends Activity {
                 System.out.println ("Thread running");
                 try
                 {
-                      socket = new DatagramSocket (4560);
+                      //socket = new DatagramSocket (4560);
+                	  socket = new DatagramSocket (55056);
                       while (true)
                       {
                             final TextView t = (TextView)findViewById(R.id.textView1);                           
