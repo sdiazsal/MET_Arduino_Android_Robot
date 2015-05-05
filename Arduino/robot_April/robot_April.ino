@@ -12,7 +12,7 @@
 
 //#define ENTREGA_4
 #define ENTREGA_5
-
+//VERSION SERGI
 
 //const IPAddress IPSend (170,20,10,13);
 const char IPSend[] = "172.20.10.13";
